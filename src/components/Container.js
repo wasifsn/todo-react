@@ -10,6 +10,7 @@ const Container = () => {
       <section className="container flex-col">
         <div className="input-text">
           <input
+            value={todo}
             type="text"
             onChange={(e) => {
               setTodo(e.target.value);
@@ -19,6 +20,7 @@ const Container = () => {
             className="add-todo-btn"
             onClick={(e) => {
               setTodoList([...todoList, { todo, id: uuidv4() }]);
+              setTodo("");
             }}
           >
             ADD
@@ -28,10 +30,24 @@ const Container = () => {
           <ul>
             {todoList.map((el, ind) => (
               <li key={el.id}>
-                <input type="checkbox" id={ind} name={el.todo} value="1" />
-                <label htmlFor={el.todo} className="strikethrough">
-                  {el.todo}
-                </label>
+                <input type="checkbox" id={ind} name={el.todo} />
+                <input
+                  defaultValue={el.todo}
+                  type="text"
+                  htmlFor={el.id}
+                  className="strikethrough"
+                  onChange={(e) => {
+                    const todo = todoList.find(
+                      (el) => el.id === e.target.getAttribute("for")
+                    );
+                    const newTodos = todoList.map((el) => {
+                      if (el.id === todo.id)
+                        return { todo: e.target.value, id: todo.id };
+                      else return el;
+                    });
+                    setTodoList(newTodos);
+                  }}
+                ></input>
                 <button
                   data-id={el.id}
                   className="remove-todo-btn"

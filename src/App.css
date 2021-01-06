@@ -111,6 +111,6 @@ label {
 
 .input-text input{width: 84%;}
 
-input[type=checkbox]:checked + label.strikethrough{
+input[type=checkbox]:checked + input.strikethrough{
   text-decoration: line-through;
 }
