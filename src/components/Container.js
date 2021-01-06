@@ -19,8 +19,10 @@ const Container = () => {
           <button
             className="add-todo-btn"
             onClick={(e) => {
-              setTodoList([...todoList, { todo, id: uuidv4() }]);
-              setTodo("");
+              if (todo) {
+                setTodoList([...todoList, { todo, id: uuidv4() }]);
+                setTodo("");
+              }
             }}
           >
             ADD
