@@ -1,9 +1,28 @@
 import React, { useState } from "react";
+import Todo from "./Todo";
 import { v4 as uuidv4 } from "uuid";
 
 const Container = () => {
   const [todo, setTodo] = useState("");
   const [todoList, setTodoList] = useState([]);
+
+  const editTodo = (e) => {
+    const todo = todoList.find((el) => el.id === e.target.getAttribute("for"));
+    const newTodos = todoList.map((el) => {
+      if (el.id === todo.id) return { todo: e.target.value, id: todo.id };
+      else return el;
+    });
+    setTodoList(newTodos);
+  };
+
+  const removeTodo = (e) => {
+    const todo = todoList.find(
+      (el) =>
+        el.id === e.target.closest(".remove-todo-btn").getAttribute("data-id")
+    );
+    const newTodos = todoList.filter((el) => el.id !== todo.id);
+    setTodoList(newTodos);
+  };
 
   return (
     <div className="outer-container flex">
@@ -30,44 +49,13 @@ const Container = () => {
         </div>
         <div className="todos flex">
           <ul>
-            {todoList.map((el, ind) => (
-              <li key={el.id}>
-                <input type="checkbox" id={ind} name={el.todo} />
-                <input
-                  defaultValue={el.todo}
-                  type="text"
-                  htmlFor={el.id}
-                  className="strikethrough"
-                  onChange={(e) => {
-                    const todo = todoList.find(
-                      (el) => el.id === e.target.getAttribute("for")
-                    );
-                    const newTodos = todoList.map((el) => {
-                      if (el.id === todo.id)
-                        return { todo: e.target.value, id: todo.id };
-                      else return el;
-                    });
-                    setTodoList(newTodos);
-                  }}
-                ></input>
-                <button
-                  data-id={el.id}
-                  className="remove-todo-btn"
-                  onClick={(e) => {
-                    const todo = todoList.find(
-                      (el) =>
-                        el.id ===
-                        e.target
-                          .closest(".remove-todo-btn")
-                          .getAttribute("data-id")
-                    );
-                    const newTodos = todoList.filter((el) => el.id !== todo.id);
-                    setTodoList(newTodos);
-                  }}
-                >
-                  <i className="fa fa-times" aria-hidden="true"></i>
-                </button>
-              </li>
+            {todoList.map((el) => (
+              <Todo
+                key={el.id}
+                el={el}
+                editTodo={editTodo}
+                removeTodo={removeTodo}
+              />
             ))}
           </ul>
         </div>
