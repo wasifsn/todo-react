@@ -29,6 +29,32 @@ const Bucket = (props) => {
     props.fetchBuckets(newTodos);
   };
 
+  const addBucket = (e) => {
+    if (bucket_item) {
+      props.newBucket({ bucket_item, id: uuidv4() });
+      const bucketAvailable = () => {
+        let bucket_item = window.prompt(
+          "bucket_item is already available, please add another Bucket"
+        );
+        props.fetchBuckets([
+          ...buckets,
+          { bucket_item: bucket_item, id: uuidv4() },
+        ]);
+        setTodo("");
+      };
+      const found = buckets.find((el) => {
+        return el.bucket_item === bucket_item;
+      });
+      buckets.length === 0
+        ? props.fetchBuckets([...buckets, { bucket_item, id: uuidv4() }])
+        : found
+        ? bucketAvailable()
+        : props.fetchBuckets([...buckets, { bucket_item, id: uuidv4() }]);
+      setTodo("");
+    } else {
+      alert("please add a Name for the Bucket");
+    }
+  };
   return (
     <section className="container flex-col">
       <div className="input-text">
@@ -42,36 +68,7 @@ const Bucket = (props) => {
         <button
           className="add-todo-btn"
           onClick={(e) => {
-            if (bucket_item) {
-              props.newBucket({ bucket_item, id: uuidv4() });
-              const bucketAvailable = () => {
-                let bucket_item = window.prompt(
-                  "bucket_item is already available, please add another Bucket"
-                );
-                props.fetchBuckets([
-                  ...buckets,
-                  { bucket_item: bucket_item, id: uuidv4() },
-                ]);
-                setTodo("");
-              };
-              const found = buckets.find((el) => {
-                return el.bucket_item === bucket_item;
-              });
-              buckets.length === 0
-                ? props.fetchBuckets([
-                    ...buckets,
-                    { bucket_item, id: uuidv4() },
-                  ])
-                : found
-                ? bucketAvailable()
-                : props.fetchBuckets([
-                    ...buckets,
-                    { bucket_item, id: uuidv4() },
-                  ]);
-              setTodo("");
-            } else {
-              alert("please add a Name for the Bucket");
-            }
+            addBucket(e);
           }}
         >
           ADD Bucket
