@@ -6,25 +6,26 @@ import { fetchBuckets, newBucket } from "../actions/BucketActions";
 import propTypes from "prop-types";
 
 const Bucket = (props) => {
-  console.log(props);
   const { buckets, ...other } = props;
-  const [todo, setTodo] = useState("");
+  const [bucket_item, setTodo] = useState("");
   const editTodo = (e) => {
-    const todo = buckets.find((el) => el.id === e.target.getAttribute("for"));
+    const bucket_item = buckets.find(
+      (el) => el.id === e.target.getAttribute("for")
+    );
     const newTodos = buckets.map((el) => {
-      if (el.id === todo.id) return { todo: e.target.value, id: todo.id };
+      if (el.id === bucket_item.id)
+        return { bucket_item: e.target.value, id: bucket_item.id };
       else return el;
     });
     props.fetchBuckets(newTodos);
   };
 
   const removeTodo = (e) => {
-    const todo = buckets.find(
+    const bucket_item = buckets.find(
       (el) =>
         el.id === e.target.closest(".remove-todo-btn").getAttribute("data-id")
     );
-    const newTodos = buckets.filter((el) => el.id !== todo.id);
-
+    const newTodos = buckets.filter((el) => el.id !== bucket_item.id);
     props.fetchBuckets(newTodos);
   };
 
@@ -32,7 +33,7 @@ const Bucket = (props) => {
     <section className="container flex-col">
       <div className="input-text">
         <input
-          value={todo}
+          value={bucket_item}
           type="text"
           onChange={(e) => {
             setTodo(e.target.value);
@@ -41,28 +42,35 @@ const Bucket = (props) => {
         <button
           className="add-todo-btn"
           onClick={(e) => {
-            if (todo) {
-              props.newBucket({ todo, id: uuidv4() });
+            if (bucket_item) {
+              props.newBucket({ bucket_item, id: uuidv4() });
               const bucketAvailable = () => {
-                let bucket = window.prompt(
-                  "bucket is already available, please add another Bucket"
+                let bucket_item = window.prompt(
+                  "bucket_item is already available, please add another Bucket"
                 );
                 props.fetchBuckets([
                   ...buckets,
-                  { todo: bucket, id: uuidv4() },
+                  { bucket_item: bucket_item, id: uuidv4() },
                 ]);
                 setTodo("");
               };
               const found = buckets.find((el) => {
-                console.log(el.todo === todo);
-                return el.todo === todo;
+                return el.bucket_item === bucket_item;
               });
               buckets.length === 0
-                ? props.fetchBuckets([...buckets, { todo, id: uuidv4() }])
+                ? props.fetchBuckets([
+                    ...buckets,
+                    { bucket_item, id: uuidv4() },
+                  ])
                 : found
                 ? bucketAvailable()
-                : props.fetchBuckets([...buckets, { todo, id: uuidv4() }]);
+                : props.fetchBuckets([
+                    ...buckets,
+                    { bucket_item, id: uuidv4() },
+                  ]);
               setTodo("");
+            } else {
+              alert("please add a Name for the Bucket");
             }
           }}
         >
@@ -73,6 +81,7 @@ const Bucket = (props) => {
         <ul>
           {buckets.map((el) => (
             <TodoList
+              type={"bucket_item"}
               key={el.id}
               el={el}
               editTodo={editTodo}

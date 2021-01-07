@@ -1,14 +1,21 @@
 import React from "react";
+import ReactTooltip from "react-tooltip";
 
-const TodoList = ({ el, editTodo, removeTodo }) => {
-  const { id, todo } = el;
+const TodoList = ({ el, editTodo, removeTodo, type, selectedBucket }) => {
+  const { id, todo, bucket_item } = el;
 
   return (
     <>
       <li>
-        <input type="checkbox" id={id} name={todo} />
         <input
-          defaultValue={todo}
+          hidden={type === "bucket" ? false : true}
+          type="checkbox"
+          id={id}
+          name={todo || bucket_item}
+        />
+        <input
+          data-tip={selectedBucket ? `BUCKET: ${selectedBucket}` : ""}
+          defaultValue={todo || bucket_item}
           type="text"
           htmlFor={id}
           className="strikethrough"
@@ -26,6 +33,7 @@ const TodoList = ({ el, editTodo, removeTodo }) => {
           <i className="fa fa-times" aria-hidden="true"></i>
         </button>
       </li>
+      <ReactTooltip effect="solid" />
     </>
   );
 };

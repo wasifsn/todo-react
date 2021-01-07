@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+:root {
+  --small-media : 576px;
+}
 *{
+  font-weight: 700;
   font-family: 'Roboto', sans-serif;
   padding: 0;
   margin: 0;
@@ -12,7 +16,7 @@
 }
 
 .App {
-  text-align: center;;
+  text-align: left;
 }
 
 .flex{
@@ -30,13 +34,15 @@
 }
 .outer-container{
   height: 100vh;
+  padding: 2rem 0;
   justify-content: space-evenly;
+  align-items: flex-end;
 }
 .container{
   padding: 1rem;
   height: 67%;
   width: 35%;
-  border: 1px solid lightgray;
+  border: 1px solid black;
 }
 .add-todo-btn:hover{
   cursor: pointer;
@@ -88,13 +94,13 @@
   padding: 1rem;
   align-self: stretch;
   height: 100%;
-  border: 1px solid lightgray;
+  border: 1px solid black;
 }
 ul{
   flex: 0 1 100%;
 }
 ul li{
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid black;
   padding: 0.25rem 0;
   list-style: none;
   display: flex;
@@ -110,11 +116,13 @@ background-color:	#F0F0F0;
 border: none;
 border-color: transparent;
 }
-input[type="checkbox"]:hover{
+input[type="checkbox"]:hover, 
+input[type="radio"]:hover{
   cursor: pointer;
 }
 
- input[type="checkbox"]{
+ input[type="checkbox"], 
+ input[type="radio"]{
    margin-right: 0.25rem;
   vertical-align:middle;
 }
@@ -126,4 +134,40 @@ label {
 
 input[type=checkbox]:checked + input.strikethrough{
   text-decoration: line-through;
+}
+
+.bucket-selector{
+  width: 80%;
+  overflow-x: auto;
+  border: 1px solid black;
+  padding: 1rem;
+  margin: 1rem 0;
+  position: absolute;
+  top: 1%;
+  left: 10%;
+}
+.bucket-selector ul{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.bucket-selector ul li{
+  padding: 0 0.5rem;
+  border-bottom: none;
+}
+
+@media (max-width: 576px){
+  .outer-container{
+    height: 200vh;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .container:nth-child(odd){
+    margin: 20% 20% 5% 20%;
+    width: 80%;
+    height: 100%;
+  }
 }
