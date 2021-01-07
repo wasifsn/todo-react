@@ -1,32 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
+import TodoList from "./TodoList";
+import { v4 as uuidv4 } from "uuid";
 
-const Todo = ({ el, editTodo, removeTodo }) => {
-  const { id, todo } = el;
+const Todo = () => {
+  const [todo, setTodo] = useState("");
+  const [todoList, setTodoList] = useState([]);
+
+  const editTodo = (e) => {
+    const todo = todoList.find((el) => el.id === e.target.getAttribute("for"));
+    const newTodos = todoList.map((el) => {
+      if (el.id === todo.id) return { todo: e.target.value, id: todo.id };
+      else return el;
+    });
+    setTodoList(newTodos);
+  };
+
+  const removeTodo = (e) => {
+    const todo = todoList.find(
+      (el) =>
+        el.id === e.target.closest(".remove-todo-btn").getAttribute("data-id")
+    );
+    const newTodos = todoList.filter((el) => el.id !== todo.id);
+    setTodoList(newTodos);
+  };
 
   return (
-    <>
-      <li>
-        <input type="checkbox" id={id} name={todo} />
+    <section className="container flex-col">
+      <div className="input-text">
         <input
-          defaultValue={todo}
+          value={todo}
           type="text"
-          htmlFor={id}
-          className="strikethrough"
           onChange={(e) => {
-            editTodo(e);
+            setTodo(e.target.value);
           }}
-        ></input>
+        />
         <button
-          data-id={id}
-          className="remove-todo-btn"
+          className="add-todo-btn"
           onClick={(e) => {
-            removeTodo(e);
+            if (todo) {
+              setTodoList([...todoList, { todo, id: uuidv4() }]);
+              setTodo("");
+            }
           }}
         >
-          <i className="fa fa-times" aria-hidden="true"></i>
+          ADD Todo
         </button>
-      </li>
-    </>
+      </div>
+      <div className="todos flex">
+        <ul>
+          {todoList.map((el) => (
+            <TodoList
+              key={el.id}
+              el={el}
+              editTodo={editTodo}
+              removeTodo={removeTodo}
+            />
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 };
 

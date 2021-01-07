@@ -1,4 +1,4 @@
 import { combineReducers } from "redux";
-import TodoReducer from "./TodoReducer";
+import BucketReducer from "./BucketReducer";
 
-export default combineReducers({ todos: TodoReducer });
+export default combineReducers({ buckets: BucketReducer });
